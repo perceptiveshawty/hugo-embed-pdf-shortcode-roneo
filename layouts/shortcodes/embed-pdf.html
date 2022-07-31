@@ -5,6 +5,7 @@
 
 <style>
 #embed-pdf-container {
+  position: relative;
   width: 100%;
   height: auto;
   /* overflow-y:scroll; */
@@ -46,6 +47,21 @@
   -webkit-animation: spin 1s ease-in-out infinite;
 }
 
+{{/*  Download link  */}}
+
+#overlayText > a:link{
+  color: rgb(83, 156, 215);
+}
+
+#overlayText {
+  position: absolute;
+  word-wrap: break-word;
+  right: 5px;
+  top: 5px;
+}
+
+
+
 @keyframes spin {
   to { -webkit-transform: rotate(360deg); }
 }
@@ -55,6 +71,15 @@
 </style>
 
 <div id="embed-pdf-container">
+  <div id="loadingWrapper">
+    <div id="loading"></div>
+  </div>
+  <div id="overlayText">
+    <a href="{{ .Get "url" }}" download>
+      <i class="fas fa-download fa-2x"></i>
+    </a>
+  </div>
+  <!-- Dynamically add canvas here -->
 </div>
 
 <script type="text/javascript">
@@ -81,7 +106,7 @@ var pdfDoc = null,
 
 
 // Attempt to show paginator and loader if enabled
-// showLoader();
+showLoader();
 
 /**
  * Get page info from document, resize canvas accordingly, and render page.
@@ -92,7 +117,7 @@ function renderPage(num) {
   // Using promise to fetch the page
   pdfDoc.getPage(num).then(function(page) {
     var pdf_cont = document.getElementById('embed-pdf-container');
-    var canvas = addCanvas(num);
+    var canvas = getCanvas(num);
     pdf_cont.appendChild(canvas);
 
     var viewport = page.getViewport({scale: scale});
@@ -134,7 +159,7 @@ function renderAllPages() {
  * Hides loader and shows canvas
  */
 function showContent(canvas) {
-  // loadingWrapper.style.display = 'none';
+  loadingWrapper.style.display = 'none';
   canvas.style.display = 'block';
 }
 
@@ -142,9 +167,7 @@ function showContent(canvas) {
  * If we haven't disabled the loader, show loader and hide canvas
  */
 function showLoader() {
-  if(hideLoader) return
   loadingWrapper.style.display = 'flex';
-  canvas.style.display = 'none';
 }
 
 /**
@@ -163,7 +186,7 @@ function queueRenderPage(num) {
 /**
  * Adds a canvas to DOM
  */
-function addCanvas(num) {
+function getCanvas(num) {
   var canvasId = 'embed-pdf-container-' + num;
   var canvas = document.createElement("canvas");
   canvas.id = canvasId;
@@ -172,26 +195,10 @@ function addCanvas(num) {
 }
 
 /**
- * Adds a canvas with loader
- */
-function addCanvasWithLoader(num) {
-
-}
-
-/**
  * Asynchronously downloads PDF.
  */
 pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
   pdfDoc = pdfDoc_;
-  var numPages = pdfDoc.numPages;
-
-  // If the user passed in a number that is out of range, render the last page.
-  if(pageNum > numPages) {
-    pageNum = numPages;
-  }
-
-  // Initial/first page rendering
-  // renderPage(pageNum);
   renderAllPages();
 });
 }
