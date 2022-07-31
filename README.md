@@ -19,7 +19,13 @@
 
 This is a [Hugo Shortcode](https://gohugo.io/extras/shortcodes/) developed for use in [Hugo](https://gohugo.io/) based websites. This shortcode allows you to embed a PDF file in a page on your Hugo website. It is developed using the [PDF.js](https://mozilla.github.io/pdf.js/) library by Mozilla.
 
-[This fork](https://gitlab.com/Roneo/hugo-shortcode-roneo-embed-pdf/-/tree/display-all-pages) allows to display every pages of the PDF instead of a pagination. The code was produced by [SuryaThiru](https://github.com/SuryaThiru/portfolio/blob/main/layouts/shortcodes/embed-pdf.html).
+[This fork](https://gitlab.com/Roneo/hugo-shortcode-roneo-embed-pdf/) brings the following updates:
+
+- add a download button
+- display every pages of the PDF instead of a pagination
+- fix URL
+
+The code was produced by [SuryaThiru](https://github.com/SuryaThiru/portfolio/blob/main/layouts/shortcodes/embed-pdf.html), I'm just wrapping up here.
 
 ![hugo-embed-pdf-shortcode cover](https://github.com/anvithks/hugo-embed-pdf-shortcode/blob/master/hugo-embed-pdf-cover.png)
 
@@ -94,6 +100,12 @@ To hide loading spinner
 
 ## FAQ  
 [\[Back to Top\]](#table-of-contents)
+
+## Troubleshooting
+
+You should carefully check the parameter `baseURL` from your `config.toml` file.
+
+Use the Firefox Dev Tools, and especially the `Console` and `Network` tabs to verify the paths and get debug informations.
 
 ## Support  
 [\[Back to Top\]](#table-of-contents)
